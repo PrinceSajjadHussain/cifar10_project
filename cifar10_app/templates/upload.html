@@ -1,0 +1,30 @@
+<!-- cifar10_app/templates/upload.html -->
+{% extends "base.html" %}
+{% block title %}Upload Image{% endblock %}
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Upload an Image</h1>
+    <p class="lead">Select an image to classify it using the CIFAR-10 model.</p>
+    <hr class="my-4">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="image">Choose an image:</label>
+            <input type="file" class="form-control-file" id="image" name="image" onchange="previewImage(event)" required>
+        </div>
+        <img id="image-preview" class="image-preview" src="#" alt="Image Preview" style="display: none;">
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+</div>
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('image-preview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+{% endblock %}

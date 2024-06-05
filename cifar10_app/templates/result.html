@@ -1,0 +1,41 @@
+<!-- cifar10_app/templates/result.html -->
+{% extends "base.html" %}
+{% block title %}Prediction Result{% endblock %}
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Prediction Result</h1>
+    <p class="lead">Here is the classification result of your uploaded image.</p>
+    <hr class="my-4">
+    <img src="{{ image.image.url }}" class="image-preview" alt="Uploaded Image">
+    <h3>Prediction: {{ image.prediction }}</h3>
+    <canvas id="predictionChart"></canvas>
+    <a href="/" class="btn btn-secondary mt-3">Upload another image</a>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var ctx = document.getElementById('predictionChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ class_names|safe }},
+                datasets: [{
+                    label: 'Confidence',
+                    data: {{ prediction_confidences|safe }},
+                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
